@@ -6,7 +6,13 @@
 (defn neighbors
   ([msize row-col] (neighbors [[-1 0] [0 1] [1 0] [0 -1]] msize row-col))
   ([deltas msize row-col]
-     (map #(map + row-col %) deltas)))
+     (filter
+      (fn [row-col] (every? #(< -1 % msize) row-col))
+      (map #(map + row-col %) deltas))))
 
 
-(neighbors 3 [1 1])
+(neighbors 3 [0 0])
+
+(get-in matrix [2 1])
+
+(map #(get-in matrix %) (neighbors 3 [0 0]))
