@@ -1,16 +1,20 @@
 (use 'clojure.test)
 
-(defn- partition [pivot values memo]
+(defn- partition-iter [pivot values memo]
   (let [smaller? #(< % pivot), [x & xs] values, {:keys [left right]} memo]
     (if x
-      (recur pivot xs
-       {:left (if (smaller? x) (conj left x) left), :right (if (smaller? x) right (conj right x))})
+      (recur pivot xs {
+                       :left (if (smaller? x) (conj left x) left),
+                       :right (if (smaller? x) right (conj right x))})
       {:left left, :right right})))
+
+(defn- partition [pivot values]
+  (partition-iter pivot values {:left [], :right []}))
 
 (defn qsort [values]
   (let [
         [pivot & tail] values,
-        {:keys [left right]} (partition pivot tail {:left [], :right []})
+        {:keys [left right]} (partition pivot tail)
         ]
     (if (seq values)
       (concat (qsort left) [pivot] (qsort right))
@@ -23,7 +27,11 @@
 
 ;;--------------------------------------------------------------------------------------------------
 
-(defn lazy-qsort [values] values)
+(defn sort-parts [values]
+  values)
+
+(defn lazy-qsort [values]
+  (sort-parts (list values)))
 
 (testing "lazy-qsort"
   (is (= [] (lazy-qsort [])))
