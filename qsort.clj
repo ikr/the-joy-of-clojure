@@ -1,13 +1,10 @@
 (use 'clojure.test)
 
-(let [{:keys [left right]} {:left [1], :right [2]}] right)
-
 (defn- partition [pivot values memo]
   (let [smaller? #(< % pivot), [x & xs] values, {:keys [left right]} memo]
     (if x
-      (if (smaller? x)
-        (recur pivot xs {:left (conj left x), :right right})
-        (recur pivot xs {:left left, :right (conj right x)}))
+      (recur pivot xs
+       {:left (if (smaller? x) (conj left x) left), :right (if (smaller? x) right (conj right x))})
       {:left left, :right right})))
 
 (defn qsort [values]
