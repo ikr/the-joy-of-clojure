@@ -13,7 +13,7 @@
 
 (defn qsort [values]
   (let [
-        [pivot & tail] values,
+        [pivot & tail] values
         {:keys [left right]} (partition pivot tail)
         ]
     (if (seq values)
@@ -27,8 +27,18 @@
 
 ;;--------------------------------------------------------------------------------------------------
 
-(defn sort-parts [values]
-  values)
+(defn sort-parts [work]
+  (lazy-seq
+   (loop [[part & parts] work]
+     (if-let [[pivot & xs] (seq part)]
+       (let [smaller? #(< % pivot)]
+         (recur (list*
+                 (filter smaller? xs)
+                 pivot
+                 (remove smaller? xs)
+                 parts)))
+       (when-let [[x & parts] parts]
+         (cons x (sort-parts parts)))))))
 
 (defn lazy-qsort [values]
   (sort-parts (list values)))
