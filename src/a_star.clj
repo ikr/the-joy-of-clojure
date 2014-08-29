@@ -23,4 +23,7 @@
        (if (> (f memo) (f item)) item memo))
      coll)))
 
-(min-by :cost [{:cost 100} {:cost 36} {:cost 2, :data 42}])
+(defn a-star [start-row-col estimated-step-cost world-matrix]
+  (let [m-size (count world-matrix)
+        [start-y start-x] start-row-col]
+    start-x))
