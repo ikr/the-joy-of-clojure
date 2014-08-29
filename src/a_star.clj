@@ -15,3 +15,12 @@
   (let [[x y] row-col]
     (* step-cost
        (- (* m-size 2) x y 2))))
+
+(defn min-by [f coll]
+  (when (seq coll)
+    (reduce
+     (fn [memo item]
+       (if (> (f memo) (f item)) item memo))
+     coll)))
+
+(min-by :cost [{:cost 100} {:cost 36} {:cost 2, :data 42}])
